@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using NEWS_App.Models;
 using NEWS_App.Models.IRepository;
 using NEWS_App.Models.IRepositoryImpl;
+using DotNetEnv;
+
+Env.Load();
+
 
 var builder = WebApplication.CreateBuilder(args);
 

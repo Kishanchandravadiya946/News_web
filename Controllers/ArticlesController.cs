@@ -70,7 +70,7 @@ namespace NEWS_App.Controllers
         public async Task<IActionResult> Create()
         {
             var userId = HttpContext.Session.GetString("Username") ?? "temp";
-            if(userId != "admin@gmail.com") return NotFound();
+            if(userId != Environment.GetEnvironmentVariable("ADMIN")) return NotFound();
             var category = await _categoryRepository.GetAllCategoriesAsync();
             if (category == null) return NotFound();
             else

@@ -147,7 +147,7 @@
                         }
                         else
                         {
-                            @if (username == "admin@gmail.com")
+                            @if (username == Environment.GetEnvironmentVariable("ADMIN"))
                             {
                                 <li>
                                     <a class="dropdown-item" asp-area="" asp-controller="Articles" asp-action="Create">Create Article</a>

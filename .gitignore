@@ -7,6 +7,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+.env
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -141,12 +142,9 @@ x86/
 [Bb][Ii][Nn]/
 
 # wwwroot folder (unnecessary if files are regenerated during build or deployment)
-wwwroot/
-
-wwwroot/**
-
 # Include only CSS files in wwwroot
-!wwwroot/**/*.css
+!wwwroot/css 
+wwwroot/
 
 
 # Roslyn cache

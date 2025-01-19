@@ -62,13 +62,13 @@ namespace NEWS_App.Controllers
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com") // SMTP server
             {
                 Port = 587,
-                Credentials = new NetworkCredential("atmfactory27@gmail.com", "gejq ukif bayt huio"),
+                Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("MAIL"), "gejq ukif bayt huio"),
                 EnableSsl = true 
             };
 
             MailMessage mailMessage = new MailMessage
             {
-                From = new MailAddress("atmfactory27@gmail.com"),
+                From = new MailAddress(Environment.GetEnvironmentVariable("MAIL")),
                 Subject = "Social news",
                 Body = $"<p>Dear {user.Username}</p>{otp}<p>",
                 IsBodyHtml = true 
@@ -144,13 +144,13 @@ namespace NEWS_App.Controllers
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com") // SMTP server
             {
                 Port = 587,
-                Credentials = new NetworkCredential("atmfactory27@gmail.com", "pqyo yoqe yqxa kvjd"),
+                Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("MAIL"), "pqyo yoqe yqxa kvjd"),
                 EnableSsl = true
             };
 
             MailMessage mailMessage = new MailMessage
             {
-                From = new MailAddress("atmfactory27@gmail.com"),
+                From = new MailAddress(Environment.GetEnvironmentVariable("MAIL")),
                 Subject = "Social news",
                 Body = $"<p>{otp}<p>",
                 IsBodyHtml = true
