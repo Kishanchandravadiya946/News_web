@@ -143,6 +143,14 @@ x86/
 # wwwroot folder (unnecessary if files are regenerated during build or deployment)
 wwwroot/
 
+wwwroot/**
+
+# Include only CSS files in wwwroot
+!wwwroot/**/*.css
+
+# Optional: Ignore minified CSS files if not needed
+wwwroot/**/*.min.css
+
 # Roslyn cache
 *.ide
 
