@@ -141,9 +141,6 @@ x86/
 [Bb][Ii][Nn]/
 
 # wwwroot folder (unnecessary if files are regenerated during build or deployment)
-wwwroot/
-
-wwwroot/**
 
 # Include only CSS files in wwwroot
 !wwwroot/**/*.css
