@@ -1,0 +1,76 @@
+﻿@model IEnumerable<NEWS_App.Models.Article>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Recommended</h1>
+<hr />
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-12 mb-4">
+
+                <div class="card rounded shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    <!-- Rounded corners -->
+                    <div class="row g-0">
+                        <!-- Full left-side image with vertical line -->
+                        <div class="col-md-4 position-relative">
+                            @if (item.ImageUrl != "No Images")
+                            {
+                                <img src="@item.ImageUrl" class="img-fluid h-100" alt="Article Image" style="object-fit: cover; border-radius: 15px 0 0 15px;" />
+                            }
+                            else
+                            {
+                                <img src="~/images/default-image.jpeg" class="img-fluid h-100" alt="Default Image" style="object-fit: cover; border-radius: 15px 0 0 15px;" />
+                            }
+
+                            <!-- Vertical line to separate image and content -->
+                            <div style="position: absolute; top: 0; right: 0; width: 1px; height: 100%; background-color: #ccc;"></div>
+                        </div>
+
+                        <!-- Content (Title, Text) on the right -->
+                        <div class="col-md-8 d-flex flex-column justify-content-between" style="padding: 20px;">
+                            <!-- Added padding -->
+                            <a href="@Url.Action("Unique", "Articles", new { category = item.CategoryId, article = item.Id })" style="text-decoration: none; color: inherit;">
+                                <div class="card-body">
+                                    <!-- Title -->
+                                    <h5 class="card-title" style="font-weight: bold;">@item.Title</h5>
+
+                                    <!-- Truncated Content -->
+                                    <p class="card-text text-truncate-multiline">@item.Content</p> <!-- Content limited to 3 lines -->
+                                </div>
+                            </a>
+                            <!-- Bottom section (Like button on left, Date on right) -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                   <!-- <button id="likeButton-@item.Id" class="btn btn-sm btn-primary" >
+                                        <i class="fas fa-thumbs-up"></i> Like
+                                     </button>-->
+                                    <span id="likeCount-@item.Id" class="ml-2">Likes: @item.LikeCount</span>
+                                </div>
+                                <div>
+                                    <small class="text-muted">Published on: @item.PublishedDate.ToString("MM/dd/yyyy")</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .text-truncate-multiline {
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Show only 3 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add the ellipsis (...) */
+        }
+    </style>
+}

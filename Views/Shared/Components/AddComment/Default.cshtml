@@ -1,0 +1,17 @@
+﻿@model NEWS_App.Models.Comment
+
+<div class="add-comment-section">
+    <h3>Add a Comment</h3>
+    <form asp-action="AddComment" asp-controller="Comments" method="post">
+        <input type="hidden" asp-for="ArticleId" />
+        <input type="hidden" asp-for="UserId" />
+
+        <div class="form-group">
+            <label for="Content">Your Comment</label>
+            <textarea asp-for="Content" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Comment</button>
+    </form>
+</div>

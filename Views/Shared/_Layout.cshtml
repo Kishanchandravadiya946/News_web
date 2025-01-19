@@ -1,0 +1,230 @@
+﻿@inject NEWS_App.Models.IRepository.ICategoryRepository _categoryRepository;
+
+@{
+    var userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
+    var username = HttpContextAccessor.HttpContext.Session.GetString("Username");
+    var email = HttpContextAccessor.HttpContext.Session.GetInt32("email");
+    var NotificationCount = HttpContextAccessor.HttpContext.Session.GetInt32("Notification");
+    var status = HttpContextAccessor.HttpContext.Session.GetInt32("Status");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Social NEWS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/NEWS_App.styles.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    @RenderSection("Styles", required: false)
+
+    <style>
+        /* Category list styling */
+        .category-list {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        /* Hide scrollbar in Webkit-based browsers */
+        .category-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Style for category items */
+        .category-list a {
+            margin-right: 15px;
+            padding: 8px 16px;
+            border-bottom: 2px solid transparent;
+            color: #007bff;
+            text-decoration: none;
+            transition: border-bottom 0.3s ease, color 0.3s ease;
+        }
+
+        /* Hover effect */
+        .category-list a:hover {
+            border-bottom: 2px solid #007bff;
+            color: #007bff;
+        }
+
+        /* Active state for clicked category */
+        .category-list a.active {
+            color: #ff5722; /* Change active category color */
+            border-bottom: 2px solid #ff5722; /* Change active bottom line */
+        }
+
+        .navbar .form-inline {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group {
+            width: 300px; /* Adjust width as needed */
+            margin-right: 10px; /* Space between search and other elements */
+        }
+
+       .input-group input {
+                border: 1px solid #ced4da; /* Default border */
+                border-radius: 4px 0 0 4px; /* Rounded left corners */
+       }
+
+       .input-group button {
+                border-radius: 0 4px 4px 0; /* Rounded right corners */
+        }
+
+                /* Optional: Add hover effect for button */
+       .input-group button:hover {
+                    background-color: #28a745; /* Change button background on hover */
+                    color: white; /* Change text color on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Articles" asp-action="Index">SOCIAL NEWS</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 d-flex align-items-center justify-content-start category-list">
+                        @* Fetch categories from repository *@
+                        @{
+                            var categories = await _categoryRepository.GetAllCategoriesAsync();
+                        }
+
+                        @foreach (var category in categories)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Articles" asp-action="Category" asp-route-name="@category.Name">
+                                    @category.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                     
+                </div>
+                <!-- Search Box -->
+                <form class="form-inline my-2 my-lg-0" method="get" asp-controller="Articles" asp-action="Search">
+                    <div class="input-group">
+                        <input class="form-control" type="search" name="title" placeholder="Search articles" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">
+                            <i class="fas fa-search"></i> <!-- Font Awesome search icon -->
+                        </button>
+                    </div>
+                </form>
+                @if(username != null)
+                {
+                    <a class="navbar-brand position-relative" asp-area="" asp-controller="Notification" asp-action="Artical">
+                        <i class="fas fa-bell"></i>
+                        @if(NotificationCount > 0){
+                        <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
+                             @NotificationCount
+                        </span>
+                        }
+                    </a>
+                }
+                <div class="dropdown">
+                    <button class="btn p-0 border-0" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: none;">
+                        <i class="fas fa-user-circle fs-3"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        @if (username == null)
+                        {
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Login">Login</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Signup">Signup</a>
+                            </li>
+                        }
+                        else
+                        {
+                            @if (username == "admin@gmail.com")
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Articles" asp-action="Create">Create Article</a>
+                                </li>
+                            }
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
+                            </li>
+                            <li>
+                                Notifications
+                                <a class="dropdown-item" onclick="updateNotification()">
+                                    <i id="notificationIcon" class="fas @(status == 1 ? "fa-toggle-on" : "fa-toggle-off")"></i>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - NEWS_App
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+
+            $('.category-list a').on('click', function (event) {
+               
+                $('.category-list a').removeClass('active'); 
+                $(this).addClass('active'); 
+            });
+        });
+
+        function updateNotification() {
+            // Make AJAX call to refresh comments
+            $.ajax({
+                url: '/User/Notification', // Replace with the correct URL for your Comments component
+                method: 'POST',
+                data: {},
+                success: function (data) {
+                    console.log(data);
+                    const notificationIcon = document.getElementById("notificationIcon");
+                    if (data) {
+                        notificationIcon.classList.remove("fa-toggle-off");
+                        notificationIcon.classList.add("fa-toggle-on");
+                        console.log("on");
+                    } else {
+                        notificationIcon.classList.remove("fa-toggle-on");
+                        notificationIcon.classList.add("fa-toggle-off");
+                        console.log("off");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", xhr.responseText); // Log the error response
+                    alert(`An error occurred: ${xhr.status} ${xhr.statusText}`);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

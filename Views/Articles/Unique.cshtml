@@ -1,0 +1,99 @@
+﻿@model NEWS_App.Models.Article 
+@{
+    ViewData["Title"] = "Article Details";
+}
+
+<h1>@Model.Title</h1>  <!-- Display the title of the article -->
+
+<div>
+    <hr />
+    <br />
+    @if (Model == null)
+    {
+        <p>No article found.</p> 
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <!-- Display Image if it exists -->
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="card-img-top" alt="Article Image" />
+            }
+            else
+            {
+                <img src="/images/default-image.jpg" class="card-img-top" alt="Default Image" /> <!-- Use a default image if none is provided -->
+            }
+
+            <div class="card-body">
+                <h5 class="card-title">@Model.Title</h5>  <!-- Article Title -->
+                <p class="card-text">@Model.Content</p>  <!-- Article Content -->
+                <p class="card-text">
+                    <small class="text-muted">Published on: @Model.PublishedDate.ToString("MM/dd/yyyy")</small>
+                </p>
+
+                <!-- Display Video link if it exists -->
+                @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                {
+                   
+                }
+                else
+                {
+                    <p><small class="text-muted">No video available</small></p>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<hr /><br />
+<div class="row">
+    <div class="col-md-12">
+        <!-- Display Comment Input Form -->
+        @await Component.InvokeAsync("AddComment", new { articleId = Model.Id })
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="commectSection">
+        @await Component.InvokeAsync("Comments", new { articleId = Model.Id })
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        @await Component.InvokeAsync("Recommed", new { catrgoryId = Model.CategoryId, articleId = Model.Id })
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        function updateComments() {
+            const sortOrder = document.getElementById('sortComments').value;
+
+            // Make AJAX call to refresh comments
+            $.ajax({
+                url: '/Comments/Comments', // Replace with the correct URL for your Comments component
+                method: 'GET',
+                data: { articleId: @Model.Id, sort: sortOrder },
+                success: function (result) {
+                    // Replace the comments section with the updated comments
+                    $('.commectSection').html(result);
+                    document.getElementById('sortComments').value = sortOrder;
+
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Error:", xhr.responseText); // Log the error response
+                    alert(`An error occurred: ${xhr.status} ${xhr.statusText}`);
+                }
+            });
+        }
+    </script>
+
+}

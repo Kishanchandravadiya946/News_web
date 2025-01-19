@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Forgot Password";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-action="Forgot">
+    <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

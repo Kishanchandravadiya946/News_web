@@ -1,0 +1,46 @@
+﻿@model NEWS_App.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 border rounded shadow" style="width: 400px; border-radius: 15px;">
+        <div class="card-body">
+            <h1 class="text-center">Login</h1>
+          
+            <hr />
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label  class="form-label">Password</label>
+                    <input asp-for="PasswordHash" class="form-control" type="password" placeholder="Enter your password" />
+                    <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-primary btn-lg w-100" />
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                Don't have an account?  <a asp-action="signup">Register here</a><br />
+                <a asp-action="Forgot">Forgot Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
