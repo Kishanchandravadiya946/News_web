@@ -62,7 +62,7 @@ namespace NEWS_App.Controllers
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com") // SMTP server
             {
                 Port = 587,
-                Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("MAIL"), "gejq ukif bayt huio"),
+                Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("MAIL"), "pqyo yoqe yqxa kvjd"),
                 EnableSsl = true 
             };
 
